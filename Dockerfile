@@ -1,30 +1,24 @@
-#instruction for base image
 FROM debian:buster
 
-ENV AUTOINDEX=on
+ENV AUTOINDEX on
 
-#instruction for builder_name
-LABEL maintainer="ccouliba@student.42.fr"
+LABEL   maintainer="ccouliba@student.42.fr"
 
-#instruction for starting all services
-RUN apt-get update && apt-get upgrade && apt-get install -y \
-    nginx \
-    mariadb-server \
-    php-mysql \
-    php-mbstring \
-    php7.3-fpm \
-    openssl \
-    wget \
-    nano
+RUN     apt-get update && apt-get install -y \
+        nginx \
+        mariadb-server \
+        php-mysql \
+        php-mbstring \
+        openssl \
+        vim \
+        wget \
+        php7.3-fpm
 
-#instruction for building config files
-COPY ./srcs/dock_init.sh ./
-COPY ./srcs/default ./tmp
-COPY ./srcs/phpmyadmin.inc.php ./tmp
-COPY ./srcs/wp_config.php ./tmp
+COPY    ./srcs/run.sh ./
+COPY    ./srcs/default ./tmp
+COPY    ./srcs/wp-config.php ./tmp
+COPY    ./srcs/config.inc.php ./tmp
 
-#instruction for listened ports
-EXPOSE 80 443
+EXPOSE  80 443
 
-#instruction for initialisation command
-ENTRYPOINT bash dock_init.sh
+CMD     bash run.sh
